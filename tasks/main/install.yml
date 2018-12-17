@@ -5,10 +5,10 @@
 #-------------------------------------------------------------------------------
 
 - name: 'include variables'
-  include_vars: "{{item}}"
+  include_vars: "{{ item }}"
   with_first_found:
     - files:
-      - "vars/{{ansible_distribution_version}}.yml"
+      - "vars/{{ ansible_distribution_version }}.yml"
       - 'vars/main.yml'
       skip: 'true'
   tags:
@@ -22,7 +22,10 @@
 - name: 'package install nano'
   package:
     state: 'present'
-    name: "{{package_name_nano}}"
+    name: "{{ package_name_nano }}"
+  register: result_nano_i
+  until: result_nano_i is succeded
+  retries: 3
   tags:
     - install
     - nano
